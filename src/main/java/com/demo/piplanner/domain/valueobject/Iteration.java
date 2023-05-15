@@ -74,7 +74,7 @@ public class Iteration {
 
     Story leftovers = null;
 
-    if (canFitStory(story)) {
+    if (story.estimate.canFitInside(remainingCapacity)) {
       planWholeStoryInIteration(story);
     } else if (canFitPartOfTheStory(story)) {
       leftovers = planPartOfTheStoryInIteration(story);
@@ -90,12 +90,8 @@ public class Iteration {
     items.add(story);
   }
 
-  public boolean canFitStory(final Story story) {
-    return remainingCapacity.greaterOrEqualThan(story.estimate);
-  }
-
   private void doCapacityCalculations(final Story story) {
-    remainingCapacity = remainingCapacity.subtract(story.estimate);
+    remainingCapacity = remainingCapacity.subtractToZero(story.estimate);
     load = load.add(story.estimate);
     loadPercentage = load.percentageOf(capacity);
   }

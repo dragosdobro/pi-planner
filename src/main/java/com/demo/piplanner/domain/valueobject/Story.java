@@ -22,14 +22,14 @@ public class Story implements Comparable<Story> {
 
   protected Estimate estimate;
 
-  public Pair<? extends Story, ? extends Story> split(final Estimate remainingCapacity) {
+  public Pair<? extends Story, ? extends Story> split(final Estimate availableCapacity) {
 
     final Pair<? extends Story, ? extends Story> storySplit;
 
-    if (estimate.lessOrEqualThan(remainingCapacity)) {
+    if (estimate.canFitInside(availableCapacity)) {
       storySplit = doNotSplitStory();
     } else {
-      storySplit = splitStoryInTwoParts(remainingCapacity);
+      storySplit = splitStoryInTwoParts(availableCapacity);
     }
 
     return storySplit;
@@ -39,7 +39,8 @@ public class Story implements Comparable<Story> {
     return Pair.with(this, null);
   }
 
-  private Pair<? extends Story, ? extends Story> splitStoryInTwoParts(final Estimate availableCapacity) {
+  private Pair<? extends Story, ? extends Story> splitStoryInTwoParts(
+      final Estimate availableCapacity) {
 
     final Story firstStory = Story.builder()
         .withId(id)
@@ -49,7 +50,11 @@ public class Story implements Comparable<Story> {
         .withParent(parent)
         .withIsMultiIteration(true)
         .withPriority(priority)
-        .withEstimate(availableCapacity)
+        .withEstimate(Estimate.builder()
+            .withDev(firstHalfStoryDevEstimate(estimate, availableCapacity))
+            .withCt(firstHalfStoryCtEstimate(estimate, availableCapacity))
+            .withFt(firstHalfStoryFtEstimate(estimate, availableCapacity))
+            .build())
         .build();
 
     final Story secondStory = Story.builder()
@@ -60,10 +65,99 @@ public class Story implements Comparable<Story> {
         .withParent(parent)
         .withIsMultiIteration(true)
         .withPriority(priority)
-        .withEstimate(estimate.subtract(availableCapacity))
+        .withEstimate(Estimate.builder()
+            .withDev(secondHalfStoryDevEstimate(estimate, availableCapacity))
+            .withCt(secondHalfStoryCtEstimate(estimate, availableCapacity))
+            .withFt(secondHalfStoryFtEstimate(estimate, availableCapacity))
+            .build())
         .build();
 
     return Pair.with(firstStory, secondStory);
+  }
+
+  private double firstHalfStoryDevEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+
+    return originalEstimate.dev > availableCapacity.dev ? availableCapacity.dev
+        : originalEstimate.dev;
+  }
+
+  private double firstHalfStoryCtEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+
+    double ctEstimate = 0;
+
+    if (originalEstimate.dev > availableCapacity.dev) {
+      ctEstimate = 0;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev >= availableCapacity.ct) {
+      ctEstimate = 0;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ct) {
+      ctEstimate = availableCapacity.ct - originalEstimate.dev;
+    }
+
+    return ctEstimate;
+  }
+
+  private double firstHalfStoryFtEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+
+    double ftEstimate = 0;
+
+    if (originalEstimate.dev > availableCapacity.dev) {
+      ftEstimate = 0;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev >= availableCapacity.ft) {
+      ftEstimate = 0;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ft) {
+      ftEstimate = availableCapacity.ft - originalEstimate.dev;
+    }
+
+    return ftEstimate;
+  }
+
+  private double secondHalfStoryDevEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+    return originalEstimate.dev > availableCapacity.dev ? originalEstimate.dev
+        - availableCapacity.dev : 0;
+  }
+
+  private double secondHalfStoryCtEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+
+    double ctEstimate = 0;
+
+    if (originalEstimate.dev > availableCapacity.dev) {
+      ctEstimate = originalEstimate.ct;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev >= availableCapacity.ct) {
+      ctEstimate = originalEstimate.ct;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ct) {
+      ctEstimate = originalEstimate.ct >= (availableCapacity.ct - originalEstimate.dev) ? originalEstimate.ct - (availableCapacity.ct - originalEstimate.dev) : originalEstimate.ct;
+    }
+
+    return ctEstimate;
+  }
+
+  private double secondHalfStoryFtEstimate(final Estimate originalEstimate,
+      final Estimate availableCapacity) {
+
+    double ftEstimate = 0;
+
+    if (originalEstimate.dev > availableCapacity.dev) {
+      ftEstimate = originalEstimate.ft;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev >= availableCapacity.ft) {
+      ftEstimate = originalEstimate.ft;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ft) {
+      ftEstimate = originalEstimate.ft >= (availableCapacity.ft - originalEstimate.dev) ? originalEstimate.ft - (availableCapacity.ft - originalEstimate.dev) : originalEstimate.ft;
+    }
+
+    return ftEstimate;
   }
 
   private String originalDescriptionByMultiIteration() {
@@ -74,9 +168,9 @@ public class Story implements Comparable<Story> {
 
     int newPartNumber = 0;
 
-    if(!isMultiIteration && partNumber == 0) {
+    if (!isMultiIteration && partNumber == 0) {
       newPartNumber = partNumber + 1;
-    } else if(isMultiIteration && partNumber > 0) {
+    } else if (isMultiIteration && partNumber > 0) {
       newPartNumber = partNumber;
     }
 
@@ -84,7 +178,8 @@ public class Story implements Comparable<Story> {
   }
 
   private String storyDescriptionWithPartsInformationForFirstStory() {
-    return isMultiIteration ? originalDescription + " Part " + partNumberByMultiIterationForFirstStory()
+    return isMultiIteration ? originalDescription + " Part "
+        + partNumberByMultiIterationForFirstStory()
         : description + " Part " + partNumberByMultiIterationForFirstStory();
   }
 
@@ -92,9 +187,9 @@ public class Story implements Comparable<Story> {
 
     int newPartNumber = 0;
 
-    if(!isMultiIteration && partNumber == 0) {
+    if (!isMultiIteration && partNumber == 0) {
       newPartNumber = partNumber + 2;
-    } else if(isMultiIteration && partNumber > 0) {
+    } else if (isMultiIteration && partNumber > 0) {
       newPartNumber = partNumber + 1;
     }
 
@@ -102,13 +197,15 @@ public class Story implements Comparable<Story> {
   }
 
   private String storyDescriptionWithPartsInformationForSecondStory() {
-    return isMultiIteration ? originalDescription + " Part " + partNumberByMultiIterationForSecondStory()
+    return isMultiIteration ? originalDescription + " Part "
+        + partNumberByMultiIterationForSecondStory()
         : description + " Part " + partNumberByMultiIterationForSecondStory();
   }
 
   @Override
   public String toString() {
-    return "STORY " + id + " - " + description + " " + estimate + " Rank: " + priority  + " Parent Feature: " + parent;
+    return "STORY " + id + " - " + description + " " + estimate + " Rank: " + priority
+        + " Parent Feature: " + parent;
   }
 
   @Override

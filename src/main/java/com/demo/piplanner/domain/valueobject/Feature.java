@@ -23,7 +23,7 @@ public class Feature extends Story {
   }
 
   @Override
-  public Pair<? extends Story, ? extends Story> split(final Estimate remainingCapacity) {
+  public Pair<? extends Story, ? extends Story> split(final Estimate availableCapacity) {
     // no op
     return null;
   }
