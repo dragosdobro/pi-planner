@@ -22,6 +22,10 @@ public class Feature extends Story {
     return this;
   }
 
+  protected Deque<Story> children() {
+    return children;
+  }
+
   @Override
   public Pair<? extends Story, ? extends Story> split(final Estimate availableCapacity) {
     // no op

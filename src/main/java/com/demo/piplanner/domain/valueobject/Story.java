@@ -1,5 +1,7 @@
 package com.demo.piplanner.domain.valueobject;
 
+import static java.lang.Math.min;
+
 import org.javatuples.Pair;
 
 import java.util.Objects;
@@ -26,7 +28,7 @@ public class Story implements Comparable<Story> {
 
     final Pair<? extends Story, ? extends Story> storySplit;
 
-    if (estimate.canFitInside(availableCapacity)) {
+    if (estimate.canFullyFitInside(availableCapacity)) {
       storySplit = doNotSplitStory();
     } else {
       storySplit = splitStoryInTwoParts(availableCapacity);
@@ -78,8 +80,7 @@ public class Story implements Comparable<Story> {
   private double firstHalfStoryDevEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    return originalEstimate.dev > availableCapacity.dev ? availableCapacity.dev
-        : originalEstimate.dev;
+    return min(originalEstimate.dev, availableCapacity.dev);
   }
 
   private double firstHalfStoryCtEstimate(final Estimate originalEstimate,
@@ -93,8 +94,13 @@ public class Story implements Comparable<Story> {
         && originalEstimate.dev >= availableCapacity.ct) {
       ctEstimate = 0;
     } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct) {
+        && originalEstimate.dev < availableCapacity.ct
+        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
       ctEstimate = availableCapacity.ct - originalEstimate.dev;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ct
+        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
+      ctEstimate = originalEstimate.ct;
     }
 
     return ctEstimate;
@@ -111,8 +117,13 @@ public class Story implements Comparable<Story> {
         && originalEstimate.dev >= availableCapacity.ft) {
       ftEstimate = 0;
     } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft) {
+        && originalEstimate.dev < availableCapacity.ft
+        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
       ftEstimate = availableCapacity.ft - originalEstimate.dev;
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ft
+        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
+      ftEstimate = originalEstimate.ft;
     }
 
     return ftEstimate;
@@ -135,8 +146,13 @@ public class Story implements Comparable<Story> {
         && originalEstimate.dev >= availableCapacity.ct) {
       ctEstimate = originalEstimate.ct;
     } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct) {
-      ctEstimate = originalEstimate.ct >= (availableCapacity.ct - originalEstimate.dev) ? originalEstimate.ct - (availableCapacity.ct - originalEstimate.dev) : originalEstimate.ct;
+        && originalEstimate.dev < availableCapacity.ct
+        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
+      ctEstimate = originalEstimate.ct - (availableCapacity.ct - originalEstimate.dev);
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ct
+        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
+      ctEstimate = 0;
     }
 
     return ctEstimate;
@@ -153,8 +169,13 @@ public class Story implements Comparable<Story> {
         && originalEstimate.dev >= availableCapacity.ft) {
       ftEstimate = originalEstimate.ft;
     } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft) {
-      ftEstimate = originalEstimate.ft >= (availableCapacity.ft - originalEstimate.dev) ? originalEstimate.ft - (availableCapacity.ft - originalEstimate.dev) : originalEstimate.ft;
+        && originalEstimate.dev < availableCapacity.ft
+        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
+      ftEstimate = originalEstimate.ft - (availableCapacity.ft - originalEstimate.dev);
+    } else if (originalEstimate.dev <= availableCapacity.dev
+        && originalEstimate.dev < availableCapacity.ft
+        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
+      ftEstimate = 0;
     }
 
     return ftEstimate;

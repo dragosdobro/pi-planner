@@ -35,16 +35,16 @@ public class Estimate {
 
   public Estimate subtractToZero(final Estimate estimate) {
     return builder()
-        .withDev(this.dev - estimate.dev > 0 ? this.dev - estimate.dev : 0)
-        .withCt(this.ct - estimate.ct > 0 ? this.ct - estimate.ct : 0)
-        .withFt(this.ft - estimate.ft > 0 ? this.ft - estimate.ft : 0)
+        .withDev(this.dev > estimate.dev ? this.dev - estimate.dev : 0)
+        .withCt(this.ct > estimate.ct ? this.ct - estimate.ct : 0)
+        .withFt(this.ft > estimate.ft ? this.ft - estimate.ft : 0)
         .build();
   }
 
-  public boolean canFitInside(final Estimate availableCapacity) {
+  public boolean canFullyFitInside(final Estimate availableCapacity) {
     return this.dev <= availableCapacity.dev
-        && this.dev + this.ct <= availableCapacity.ct
-        && this.dev + this.ft <= availableCapacity.ft;
+        && (this.dev + this.ct) <= availableCapacity.ct
+        && (this.dev + this.ft) <= availableCapacity.ft;
   }
 
   public Estimate divide(final Estimate estimate) {

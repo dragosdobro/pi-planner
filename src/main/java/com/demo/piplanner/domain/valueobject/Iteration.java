@@ -74,7 +74,7 @@ public class Iteration {
 
     Story leftovers = null;
 
-    if (story.estimate.canFitInside(remainingCapacity)) {
+    if (story.estimate.canFullyFitInside(remainingCapacity)) {
       planWholeStoryInIteration(story);
     } else if (canFitPartOfTheStory(story)) {
       leftovers = planPartOfTheStoryInIteration(story);
@@ -138,7 +138,7 @@ public class Iteration {
   private String allFeaturesToString() {
 
     final StringJoiner joiner = new StringJoiner(repeat(CR + LF, 2));
-    items.stream().forEach(feature -> joiner.add(repeat(SPACE, 8) + feature.toString()));
+    items.forEach(feature -> joiner.add(repeat(SPACE, 8) + feature.toString()));
 
     return joiner.toString();
   }
