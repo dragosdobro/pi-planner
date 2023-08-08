@@ -17,4 +17,4 @@ The application is not fancy:
 estimations and the template helps you write the input data Java code, yes I am aware of the
 irony in using Excel to write Java :)) , if you like Excel so much, I challenge to translate
 this code into VBA and just use Excel :)) )
-- also one might consider porting this codebase to VBA now that it is stable, as it will help Excel business users a lot -> might do just that in the future at some point)
+- on a serious note I am considering porting this codebase to VBA now that it is stable, as it will help Excel business users a lot -> might do just that in the future at some point (•_•) ( •_•)>⌐■-■ (⌐■_■)
