@@ -1,6 +1,7 @@
 package com.demo.piplanner.domain.valueobject;
 
 import static com.demo.piplanner.domain.valueobject.Estimate.ZERO;
+import static com.google.common.collect.Maps.difference;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 import static java.util.stream.Stream.concat;
@@ -8,7 +9,6 @@ import static org.apache.commons.lang3.StringUtils.CR;
 import static org.apache.commons.lang3.StringUtils.LF;
 
 import com.google.common.collect.MapDifference;
-import com.google.common.collect.Maps;
 
 import java.util.List;
 import java.util.Map;
@@ -20,24 +20,25 @@ public class ProductIncrement {
   private String name;
   private List<Iteration> iterations;
 
-  private Map<String, Estimate> backlogItemEstimatesTallyBeforePlanning;
+  private Map<String, Estimate> backlogItemsTotalEstimateBeforePlanning;
 
-  private Map<String, Estimate> piItemEstimatesTallyAfterPlanning;
+  private Map<String, Estimate> piItemsTotalEstimateAfterPlanning;
 
   public void planBacklogInIterations(final Backlog backlog) {
-    backlogItemEstimatesTallyBeforePlanning = backlog.itemEstimatesTally();
+    backlogItemsTotalEstimateBeforePlanning = backlog.itemsTotalEstimate();
 
     for (final Iteration iteration : iterations) {
       iteration.planBacklogInIteration(backlog);
     }
 
-    piItemEstimatesTallyAfterPlanning = itemEstimatesTally(backlog);
+    piItemsTotalEstimateAfterPlanning = itemsTotalEstimate(backlog);
   }
 
-  protected Map<String, Estimate> itemEstimatesTally(final Backlog unplannedBacklog) {
+  protected Map<String, Estimate> itemsTotalEstimate(final Backlog unplannedBacklog) {
 
     final Stream<Story> plannedStoriesOrDefects = iterations.stream()
         .flatMap(iteration -> iteration.items.stream());
+
     final Stream<Story> notPlannedStoriesOrDefects = unplannedBacklog.features.stream()
         .map(feature -> (Feature) feature)
         .flatMap(feature -> feature.children().stream());
@@ -53,25 +54,34 @@ public class ProductIncrement {
             ));
   }
 
-  public boolean piPlanningIntegrityCheck() {
+  public boolean planningCorrectnessCheck() {
 
-    final MapDifference<String, Estimate> difference = Maps.difference(
-        backlogItemEstimatesTallyBeforePlanning, piItemEstimatesTallyAfterPlanning);
+    final boolean isPlanningCorrect = backlogItemsTotalEstimateBeforePlanning.equals(
+        piItemsTotalEstimateAfterPlanning);
 
+    final StringJoiner joiner = new StringJoiner(CR + LF);
+    if(isPlanningCorrect) {
 
-    System.out.println("Estimates that differ Backlog vs PI: ");
-    difference.entriesDiffering()
-        .forEach((key, value) -> System.out.println("key: " + key + " value: " + value));
+      joiner.add("PRODUCT INCREMENT " + name + " Planning correctness check PASSED!");
+      System.out.println(joiner);
+    } else {
 
-    System.out.println("Estimates that are only in Backlog: ");
-    difference.entriesOnlyOnLeft()
-        .forEach((key, value) -> System.out.println("key: " + key + " value: " + value));
+      joiner.add("PRODUCT INCREMENT " + name + " Planning correctness check FAILED!");
 
-    System.out.println("Estimates that are only in PI: ");
-    difference.entriesOnlyOnRight()
-        .forEach((key, value) -> System.out.println("key: " + key + " value: " + value));
+      final MapDifference<String, Estimate> difference = difference(
+          backlogItemsTotalEstimateBeforePlanning, piItemsTotalEstimateAfterPlanning);
 
-    return backlogItemEstimatesTallyBeforePlanning.equals(piItemEstimatesTallyAfterPlanning);
+      joiner.add("Estimates that differ Backlog vs PI: ");
+      joiner.add(difference.entriesDiffering().toString());
+
+      joiner.add("Estimates that are only in Backlog: ");
+      joiner.add(difference.entriesOnlyOnLeft().toString());
+
+      joiner.add("Estimates that are only in PI: ");
+      joiner.add(difference.entriesOnlyOnRight().toString());
+    }
+
+    return isPlanningCorrect;
   }
 
   @Override

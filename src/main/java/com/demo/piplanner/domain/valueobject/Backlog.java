@@ -18,7 +18,7 @@ public class Backlog {
   protected String name;
   protected Deque<? extends Story> features;
 
-  protected Map<String, Estimate> itemEstimatesTally() {
+  protected Map<String, Estimate> itemsTotalEstimate() {
     return features.stream()
         .map(feature -> (Feature) feature)
         .flatMap(feature -> feature.children().stream())

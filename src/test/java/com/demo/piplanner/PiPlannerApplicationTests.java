@@ -1,5 +1,7 @@
 package com.demo.piplanner;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.demo.piplanner.domain.valueobject.Backlog;
 import com.demo.piplanner.domain.valueobject.Estimate;
 import com.demo.piplanner.domain.valueobject.Feature;
@@ -8,21 +10,14 @@ import com.demo.piplanner.domain.valueobject.ProductIncrement;
 import com.demo.piplanner.domain.valueobject.Story;
 import com.google.common.collect.Lists;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-//@SpringBootTest
 class PiPlannerApplicationTests {
 
   private Backlog backlog;
 
   private ProductIncrement productIncrement;
-
-  @Test
-  @Ignore
-  void contextLoads() {
-  }
 
   @BeforeEach
   void setUp() {
@@ -64,6 +59,8 @@ class PiPlannerApplicationTests {
 
      System.out.println(productIncrement);
      System.out.println(backlog);
+
+    assertTrue(productIncrement.planningCorrectnessCheck(), "Backlog versus PI Planning estimates DO NOT MATCH");
   }
 
 }
