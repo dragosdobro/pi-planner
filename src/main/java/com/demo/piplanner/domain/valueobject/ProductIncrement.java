@@ -60,10 +60,10 @@ public class ProductIncrement {
         piItemsTotalEstimateAfterPlanning);
 
     final StringJoiner joiner = new StringJoiner(CR + LF);
+
     if(isPlanningCorrect) {
 
       joiner.add("PRODUCT INCREMENT " + name + " Planning correctness check PASSED!");
-      System.out.println(joiner);
     } else {
 
       joiner.add("PRODUCT INCREMENT " + name + " Planning correctness check FAILED!");
@@ -80,6 +80,8 @@ public class ProductIncrement {
       joiner.add("Estimates that are only in PI: ");
       joiner.add(difference.entriesOnlyOnRight().toString());
     }
+
+    System.out.println(joiner);
 
     return isPlanningCorrect;
   }

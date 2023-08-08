@@ -1,5 +1,7 @@
 package com.demo.piplanner.domain.valueobject;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -49,7 +51,9 @@ class ProductIncrementTest {
 
     productIncrement.planBacklogInIterations(backlog);
 
-    // System.out.println(productIncrement);
-    // System.out.println(backlog);
+     System.out.println(productIncrement);
+     System.out.println(backlog);
+
+     assertTrue(productIncrement.planningCorrectnessCheck(), "Backlog versus PI Planning estimates DO NOT MATCH");
   }
 }
