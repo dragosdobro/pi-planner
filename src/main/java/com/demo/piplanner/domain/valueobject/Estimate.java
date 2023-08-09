@@ -1,17 +1,21 @@
 package com.demo.piplanner.domain.valueobject;
 
+import static java.math.RoundingMode.HALF_EVEN;
+import static org.apache.commons.lang3.ObjectUtils.defaultIfNull;
+
+import java.math.BigDecimal;
 import java.util.StringJoiner;
 
 public class Estimate {
 
-  protected double dev;
+  protected BigDecimal dev;
 
-  protected double ct;
+  protected BigDecimal ct;
 
-  protected double ft;
+  protected BigDecimal ft;
 
-  public static final Estimate ZERO = builder().withDev(0).withCt(0)
-      .withFt(0).build();
+  public static final Estimate ZERO = builder().withDev(BigDecimal.ZERO).withCt(BigDecimal.ZERO)
+      .withFt(BigDecimal.ZERO).build();
 
   public static Builder builder() {
     return Builder.newBuilder();
@@ -19,80 +23,95 @@ public class Estimate {
 
   public Estimate add(final Estimate estimate) {
     return builder()
-        .withDev(this.dev + estimate.dev)
-        .withCt(this.ct + estimate.ct)
-        .withFt(this.ft + estimate.ft)
+        .withDev(this.dev.add(estimate.dev))
+        .withCt(this.ct.add(estimate.ct))
+        .withFt(this.ft.add(estimate.ft))
         .build();
   }
 
   public Estimate subtract(final Estimate estimate) {
     return builder()
-        .withDev(this.dev - estimate.dev)
-        .withCt(this.ct - estimate.ct)
-        .withFt(this.ft - estimate.ft)
+        .withDev(this.dev.subtract(estimate.dev))
+        .withCt(this.ct.subtract(estimate.ct))
+        .withFt(this.ft.subtract(estimate.ft))
         .build();
   }
 
   public Estimate subtractToZero(final Estimate estimate) {
+//    return builder()
+//        .withDev(this.dev > estimate.dev ? this.dev - estimate.dev : 0)
+//        .withCt(this.ct > estimate.ct ? this.ct - estimate.ct : 0)
+//        .withFt(this.ft > estimate.ft ? this.ft - estimate.ft : 0)
+//        .build();
     return builder()
-        .withDev(this.dev > estimate.dev ? this.dev - estimate.dev : 0)
-        .withCt(this.ct > estimate.ct ? this.ct - estimate.ct : 0)
-        .withFt(this.ft > estimate.ft ? this.ft - estimate.ft : 0)
+        .withDev(this.dev.subtract(estimate.dev).max(BigDecimal.ZERO))
+        .withCt(this.ct.subtract(estimate.ct).max(BigDecimal.ZERO))
+        .withFt(this.ft.subtract(estimate.ft).max(BigDecimal.ZERO))
         .build();
   }
 
   public boolean canFullyFitInside(final Estimate availableCapacity) {
-    return this.dev <= availableCapacity.dev
-        && (this.dev + this.ct) <= availableCapacity.ct
-        && (this.dev + this.ft) <= availableCapacity.ft;
+    return this.dev.compareTo(availableCapacity.dev) <= 0
+        && (this.dev.add(this.ct)).compareTo(availableCapacity.ct) <= 0
+        && (this.dev.add(this.ft)).compareTo(availableCapacity.ft) <= 0;
   }
 
   public Estimate divide(final Estimate estimate) {
     return builder()
-        .withDev(this.dev / estimate.dev)
-        .withCt(this.ct / estimate.ct)
-        .withFt(this.ft / estimate.ft)
+        .withDev(this.dev.divide(estimate.dev, HALF_EVEN))
+        .withCt(this.ct.divide(estimate.ct, HALF_EVEN))
+        .withFt(this.ft.divide(estimate.ft, HALF_EVEN))
         .build();
   }
 
   public Estimate multiply(final Estimate estimate) {
     return builder()
-        .withDev(this.dev * estimate.dev)
-        .withCt(this.ct * estimate.ct)
-        .withFt(this.ft * estimate.ft)
+        .withDev(this.dev.multiply(estimate.dev))
+        .withCt(this.ct.multiply(estimate.ct))
+        .withFt(this.ft.multiply(estimate.ft))
         .build();
   }
 
   public Estimate percentageOf(final Estimate estimate) {
     return builder()
-        .withDev(this.dev * 100 / estimate.dev)
-        .withCt(this.ct * 100 / estimate.ct)
-        .withFt(this.ft * 100 / estimate.ft)
+        .withDev(this.dev.multiply(new BigDecimal("100")).divide(estimate.dev, HALF_EVEN))
+        .withCt(this.ct.multiply(new BigDecimal("100")).divide(estimate.ct, HALF_EVEN))
+        .withFt(this.ft.multiply(new BigDecimal("100")).divide(estimate.ft, HALF_EVEN))
         .build();
   }
 
   public boolean greaterThan(final Estimate estimate) {
-    return this.dev > estimate.dev && this.ct > estimate.ct && this.ft > estimate.ft;
+    return this.dev.compareTo(estimate.dev) > 0
+        && this.ct.compareTo(estimate.ct) > 0
+        && this.ft.compareTo(estimate.ft) > 0;
   }
 
   public boolean greaterOrEqualThan(final Estimate estimate) {
-    return this.dev >= estimate.dev && this.ct >= estimate.ct && this.ft >= estimate.ft;
+    return this.dev.compareTo(estimate.dev) >= 0
+        && this.ct.compareTo(estimate.ct) >= 0
+        && this.ft.compareTo(estimate.ft) >= 0;
   }
 
   public boolean lessThan(final Estimate estimate) {
-    return this.dev < estimate.dev && this.ct < estimate.ct && this.ft < estimate.ft;
+    return this.dev.compareTo(estimate.dev) < 0
+        && this.ct.compareTo(estimate.ct) < 0
+        && this.ft.compareTo(estimate.ft) < 0;
   }
 
   public boolean lessOrEqualThan(final Estimate estimate) {
-    return this.dev <= estimate.dev && this.ct <= estimate.ct && this.ft <= estimate.ft;
+    return this.dev.compareTo(estimate.dev) <= 0
+        && this.ct.compareTo(estimate.ct) <= 0
+        && this.ft.compareTo(estimate.ft) <= 0;
   }
 
   public boolean isZero() {
-    return this.dev == 0 && this.ct == 0 && this.ft == 0;
+    return this.dev.compareTo(BigDecimal.ZERO) == 0
+        && this.ct.compareTo(BigDecimal.ZERO) == 0
+        && this.ft.compareTo(BigDecimal.ZERO) == 0;
   }
 
-  public double sumUp() {
-    return this.dev + this.ct + this.ft;
+  public BigDecimal sumUp() {
+    return this.dev.add(this.ct).add(this.ft);
   }
 
   @Override
@@ -100,31 +119,23 @@ public class Estimate {
     if (this == o) {
       return true;
     }
-    if (o == null || getClass() != o.getClass()) {
+
+    if (!(o instanceof Estimate)) {
       return false;
     }
 
-    final Estimate estimate = (Estimate) o;
+    final Estimate otherEstimate = (Estimate) o;
 
-    if (Double.compare(estimate.dev, dev) != 0) {
-      return false;
-    }
-    if (Double.compare(estimate.ct, ct) != 0) {
-      return false;
-    }
-    return Double.compare(estimate.ft, ft) == 0;
+    return this.dev.compareTo(otherEstimate.dev) == 0
+        && this.ct.compareTo(otherEstimate.ct) == 0
+        && this.ft.compareTo(otherEstimate.ft) == 0;
   }
 
   @Override
   public int hashCode() {
-    int result;
-    long temp;
-    temp = Double.doubleToLongBits(dev);
-    result = (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(ct);
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
-    temp = Double.doubleToLongBits(ft);
-    result = 31 * result + (int) (temp ^ (temp >>> 32));
+    int result = dev != null ? dev.hashCode() : 0;
+    result = 31 * result + (ct != null ? ct.hashCode() : 0);
+    result = 31 * result + (ft != null ? ft.hashCode() : 0);
     return result;
   }
 
@@ -139,9 +150,9 @@ public class Estimate {
 
   public static final class Builder {
 
-    private double dev;
-    private double ct;
-    private double ft;
+    private BigDecimal dev;
+    private BigDecimal ct;
+    private BigDecimal ft;
 
     private Builder() {
     }
@@ -150,18 +161,18 @@ public class Estimate {
       return new Builder();
     }
 
-    public Builder withDev(final double dev) {
-      this.dev = dev;
+    public Builder withDev(final BigDecimal dev) {
+      this.dev = defaultIfNull(dev, BigDecimal.ZERO);
       return this;
     }
 
-    public Builder withCt(final double ct) {
-      this.ct = ct;
+    public Builder withCt(final BigDecimal ct) {
+      this.ct = defaultIfNull(ct, BigDecimal.ZERO);
       return this;
     }
 
-    public Builder withFt(final double ft) {
-      this.ft = ft;
+    public Builder withFt(final BigDecimal ft) {
+      this.ft = defaultIfNull(ft, BigDecimal.ZERO);
       return this;
     }
 

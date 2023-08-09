@@ -7,6 +7,7 @@ import static org.apache.commons.lang3.StringUtils.repeat;
 
 import org.javatuples.Pair;
 
+import java.math.BigDecimal;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.StringJoiner;
@@ -97,9 +98,13 @@ public class Iteration {
   }
 
   public boolean canFitPartOfTheStory(final Story story) {
-    return (remainingCapacity.dev > 0 && story.estimate.dev > 0)
-        || (story.estimate.dev == 0 && remainingCapacity.ct > 0 && story.estimate.ct > 0)
-        || (story.estimate.dev == 0 && remainingCapacity.ft > 0 && story.estimate.ft > 0);
+//    return (remainingCapacity.dev > 0 && story.estimate.dev > 0)
+//        || (story.estimate.dev == 0 && remainingCapacity.ct > 0 && story.estimate.ct > 0)
+//        || (story.estimate.dev == 0 && remainingCapacity.ft > 0 && story.estimate.ft > 0);
+
+   return (remainingCapacity.dev.compareTo(BigDecimal.ZERO) > 0 && story.estimate.dev.compareTo(BigDecimal.ZERO) > 0)
+        || (story.estimate.dev.compareTo(BigDecimal.ZERO) == 0 && remainingCapacity.ct.compareTo(BigDecimal.ZERO) > 0 && story.estimate.ct.compareTo(BigDecimal.ZERO) > 0)
+        || (story.estimate.dev.compareTo(BigDecimal.ZERO) == 0 && remainingCapacity.ft.compareTo(BigDecimal.ZERO) > 0 && story.estimate.ft.compareTo(BigDecimal.ZERO) > 0);
   }
 
   private Story planPartOfTheStoryInIteration(final Story story) {

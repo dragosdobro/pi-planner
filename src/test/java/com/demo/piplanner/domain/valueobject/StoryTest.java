@@ -6,6 +6,8 @@ import org.javatuples.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
+
 class StoryTest {
 
   private Story originalStory_10_7_8;
@@ -23,19 +25,19 @@ class StoryTest {
   void setUp() {
 
     originalStory_10_7_8 = Story.builder().withId("1").withDescription("Business Story").withPriority(1)
-        .withEstimate(Estimate.Builder.newBuilder().withDev(10).withCt(7).withFt(8).build())
+        .withEstimate(Estimate.Builder.newBuilder().withDev(new BigDecimal("10")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build())
         .build();
 
-    availableCapacity_11_18_19 = Estimate.Builder.newBuilder().withDev(11).withCt(18).withFt(19).build();
-    availableCapacity_10_17_18 = Estimate.Builder.newBuilder().withDev(10).withCt(17).withFt(18).build();
-    availableCapacity_4_7_8 = Estimate.Builder.newBuilder().withDev(10).withCt(7).withFt(8).build();
-    availableCapacity_3_2_2 = Estimate.Builder.newBuilder().withDev(3).withCt(2).withFt(2).build();
-    availableCapacity_3_0_0 = Estimate.Builder.newBuilder().withDev(3).withCt(0).withFt(0).build();
-    availableCapacity_7_7_8 = Estimate.Builder.newBuilder().withDev(7).withCt(7).withFt(8).build();
-    availableCapacity_3_8_9 = Estimate.Builder.newBuilder().withDev(3).withCt(8).withFt(9).build();
-    availableCapacity_12_8_10 = Estimate.Builder.newBuilder().withDev(12).withCt(8).withFt(10).build();
-    availableCapacity_12_13_11 = Estimate.Builder.newBuilder().withDev(12).withCt(13).withFt(11).build();
-    availableCapacity_4_7_8 = Estimate.Builder.newBuilder().withDev(4).withCt(7).withFt(8).build();
+    availableCapacity_11_18_19 = Estimate.Builder.newBuilder().withDev(new BigDecimal("11")).withCt(new BigDecimal("18")).withFt(new BigDecimal("19")).build();
+    availableCapacity_10_17_18 = Estimate.Builder.newBuilder().withDev(new BigDecimal("10")).withCt(new BigDecimal("17")).withFt(new BigDecimal("18")).build();
+    availableCapacity_4_7_8 = Estimate.Builder.newBuilder().withDev(new BigDecimal("10")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build();
+    availableCapacity_3_2_2 = Estimate.Builder.newBuilder().withDev(new BigDecimal("3")).withCt(new BigDecimal("2")).withFt(new BigDecimal("2")).build();
+    availableCapacity_3_0_0 = Estimate.Builder.newBuilder().withDev(new BigDecimal("3")).withCt(new BigDecimal("0")).withFt(new BigDecimal("0")).build();
+    availableCapacity_7_7_8 = Estimate.Builder.newBuilder().withDev(new BigDecimal("7")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build();
+    availableCapacity_3_8_9 = Estimate.Builder.newBuilder().withDev(new BigDecimal("3")).withCt(new BigDecimal("8")).withFt(new BigDecimal("9")).build();
+    availableCapacity_12_8_10 = Estimate.Builder.newBuilder().withDev(new BigDecimal("12")).withCt(new BigDecimal("8")).withFt(new BigDecimal("10")).build();
+    availableCapacity_12_13_11 = Estimate.Builder.newBuilder().withDev(new BigDecimal("12")).withCt(new BigDecimal("13")).withFt(new BigDecimal("11")).build();
+    availableCapacity_4_7_8 = Estimate.Builder.newBuilder().withDev(new BigDecimal("4")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build();
 
   }
 
@@ -66,12 +68,12 @@ class StoryTest {
 
     final Story story_3_0_0 = Story.builder().withId("1").withDescription("Business Story Part 1")
         .withPriority(1).withPartNumber(1).withIsMultiIteration(true)
-        .withEstimate(Estimate.builder().withDev(3).withCt(0).withFt(0).build())
+        .withEstimate(Estimate.builder().withDev(new BigDecimal("3")).withCt(new BigDecimal("0")).withFt(new BigDecimal("0")).build())
         .withOriginalDescription("Business Story").build();
 
     final Story story_7_7_8 = Story.builder().withId("1").withDescription("Business Story Part 2")
         .withPriority(1).withPartNumber(2).withIsMultiIteration(true)
-        .withEstimate(Estimate.Builder.newBuilder().withDev(7).withCt(7).withFt(8).build())
+        .withEstimate(Estimate.Builder.newBuilder().withDev(new BigDecimal("7")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build())
         .withOriginalDescription("Business Story").build();
 
 
@@ -87,21 +89,21 @@ class StoryTest {
 
     final Story story_3_0_0 = Story.builder().withId("1").withDescription("Business Story Part 1")
         .withPriority(1).withPartNumber(1).withIsMultiIteration(true)
-        .withEstimate(Estimate.builder().withDev(3).withCt(0).withFt(0).build())
+        .withEstimate(Estimate.builder().withDev(new BigDecimal("3")).withCt(new BigDecimal("0")).withFt(new BigDecimal("0")).build())
         .withOriginalDescription("Business Story").build();
 
     final Story story_7_7_8 = Story.builder().withId("1").withDescription("Business Story Part 2")
         .withPriority(1).withPartNumber(2).withIsMultiIteration(true)
-        .withEstimate(Estimate.Builder.newBuilder().withDev(7).withCt(7).withFt(8).build())
+        .withEstimate(Estimate.Builder.newBuilder().withDev(new BigDecimal("7")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build())
         .withOriginalDescription("Business Story").build();
 
 
     final Pair<? extends Story, ? extends Story> expectedStorySplit = Pair.with(story_3_0_0, story_7_7_8);
 
-      final Pair<? extends Story, ? extends Story> storySplit = originalStory_10_7_8.split(
-          availableCapacity_3_8_9);
+    final Pair<? extends Story, ? extends Story> storySplit = originalStory_10_7_8.split(
+        availableCapacity_3_8_9);
 
-      assertEquals("Story split is incorrect", expectedStorySplit, storySplit);
+    assertEquals("Story split is incorrect", expectedStorySplit, storySplit);
   }
 
   @Test
@@ -109,20 +111,20 @@ class StoryTest {
 
     final Story story_10_0_0 = Story.builder().withId("1").withDescription("Business Story Part 1")
         .withPriority(1).withPartNumber(1).withIsMultiIteration(true)
-        .withEstimate(Estimate.builder().withDev(10).withCt(0).withFt(0).build())
+        .withEstimate(Estimate.builder().withDev(new BigDecimal("10")).withCt(new BigDecimal("0")).withFt(new BigDecimal("0")).build())
         .withOriginalDescription("Business Story").build();
 
     final Story story_0_7_8 = Story.builder().withId("1").withDescription("Business Story Part 2")
         .withPriority(1).withPartNumber(2).withIsMultiIteration(true)
-        .withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(7).withFt(8).build())
+        .withEstimate(Estimate.Builder.newBuilder().withDev(new BigDecimal("0")).withCt(new BigDecimal("7")).withFt(new BigDecimal("8")).build())
         .withOriginalDescription("Business Story").build();
 
-      final Pair<? extends Story, ? extends Story> expectedStorySplit = Pair.with(story_10_0_0, story_0_7_8);
+    final Pair<? extends Story, ? extends Story> expectedStorySplit = Pair.with(story_10_0_0, story_0_7_8);
 
-      final Pair<? extends Story, ? extends Story> storySplit = originalStory_10_7_8.split(
-          availableCapacity_12_8_10);
+    final Pair<? extends Story, ? extends Story> storySplit = originalStory_10_7_8.split(
+        availableCapacity_12_8_10);
 
-      assertEquals("Story split is incorrect", expectedStorySplit, storySplit);
+    assertEquals("Story split is incorrect", expectedStorySplit, storySplit);
 
   }
 
@@ -131,12 +133,12 @@ class StoryTest {
 
     final Story story_10_3_1 = Story.builder().withId("1").withDescription("Business Story Part 1")
         .withPriority(1).withPartNumber(1).withIsMultiIteration(true)
-        .withEstimate(Estimate.builder().withDev(10).withCt(3).withFt(1).build())
+        .withEstimate(Estimate.builder().withDev(new BigDecimal("10")).withCt(new BigDecimal("3")).withFt(new BigDecimal("1")).build())
         .withOriginalDescription("Business Story").build();
 
     final Story story_0_4_7 = Story.builder().withId("1").withDescription("Business Story Part 2")
         .withPriority(1).withPartNumber(2).withIsMultiIteration(true)
-        .withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(4).withFt(7).build())
+        .withEstimate(Estimate.Builder.newBuilder().withDev(new BigDecimal("0")).withCt(new BigDecimal("4")).withFt(new BigDecimal("7")).build())
         .withOriginalDescription("Business Story").build();
 
     final Pair<? extends Story, ? extends Story> expectedStorySplit = Pair.with(story_10_3_1, story_0_4_7);

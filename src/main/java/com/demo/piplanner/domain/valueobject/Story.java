@@ -1,9 +1,8 @@
 package com.demo.piplanner.domain.valueobject;
 
-import static java.lang.Math.min;
-
 import org.javatuples.Pair;
 
+import java.math.BigDecimal;
 import java.util.Objects;
 
 public class Story implements Comparable<Story> {
@@ -77,105 +76,168 @@ public class Story implements Comparable<Story> {
     return Pair.with(firstStory, secondStory);
   }
 
-  private double firstHalfStoryDevEstimate(final Estimate originalEstimate,
+  private BigDecimal firstHalfStoryDevEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    return min(originalEstimate.dev, availableCapacity.dev);
+    //return min(originalEstimate.dev, availableCapacity.dev);
+    return originalEstimate.dev.min(availableCapacity.dev);
   }
 
-  private double firstHalfStoryCtEstimate(final Estimate originalEstimate,
+  private BigDecimal firstHalfStoryCtEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    double ctEstimate = 0;
+    BigDecimal ctEstimate = BigDecimal.ZERO;
+//
+//    if (originalEstimate.dev > availableCapacity.dev) {
+//      ctEstimate = 0;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev >= availableCapacity.ct) {
+//      ctEstimate = 0;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ct
+//        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
+//      ctEstimate = availableCapacity.ct - originalEstimate.dev;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ct
+//        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
+//      ctEstimate = originalEstimate.ct;
+//    }
 
-    if (originalEstimate.dev > availableCapacity.dev) {
-      ctEstimate = 0;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev >= availableCapacity.ct) {
-      ctEstimate = 0;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct
-        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
-      ctEstimate = availableCapacity.ct - originalEstimate.dev;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct
-        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
+    if (originalEstimate.dev.compareTo(availableCapacity.dev) > 0) {
+      ctEstimate = BigDecimal.ZERO;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) >= 0) {
+      ctEstimate = BigDecimal.ZERO;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) < 0
+        && originalEstimate.dev.add(originalEstimate.ct).compareTo(availableCapacity.ct) > 0) {
+      ctEstimate = availableCapacity.ct.subtract(originalEstimate.dev);
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) < 0
+        && originalEstimate.dev.add(originalEstimate.ct).compareTo(availableCapacity.ct) <= 0) {
       ctEstimate = originalEstimate.ct;
     }
 
     return ctEstimate;
   }
 
-  private double firstHalfStoryFtEstimate(final Estimate originalEstimate,
+  private BigDecimal firstHalfStoryFtEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    double ftEstimate = 0;
+    BigDecimal ftEstimate = BigDecimal.ZERO;
 
-    if (originalEstimate.dev > availableCapacity.dev) {
-      ftEstimate = 0;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev >= availableCapacity.ft) {
-      ftEstimate = 0;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft
-        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
-      ftEstimate = availableCapacity.ft - originalEstimate.dev;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft
-        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
+//    if (originalEstimate.dev > availableCapacity.dev) {
+//      ftEstimate = 0;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev >= availableCapacity.ft) {
+//      ftEstimate = 0;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ft
+//        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
+//      ftEstimate = availableCapacity.ft - originalEstimate.dev;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ft
+//        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
+//      ftEstimate = originalEstimate.ft;
+//    }
+
+    if (originalEstimate.dev.compareTo(availableCapacity.dev) > 0) {
+      ftEstimate = BigDecimal.ZERO;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) >= 0) {
+      ftEstimate = BigDecimal.ZERO;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) < 0
+        && originalEstimate.dev.add(originalEstimate.ft).compareTo(availableCapacity.ft) > 0) {
+      ftEstimate = availableCapacity.ft.subtract(originalEstimate.dev);
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) < 0
+        && originalEstimate.dev.add(originalEstimate.ft).compareTo(availableCapacity.ft) <= 0) {
       ftEstimate = originalEstimate.ft;
     }
 
     return ftEstimate;
   }
 
-  private double secondHalfStoryDevEstimate(final Estimate originalEstimate,
+  private BigDecimal secondHalfStoryDevEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
-    return originalEstimate.dev > availableCapacity.dev ? originalEstimate.dev
-        - availableCapacity.dev : 0;
+    //return originalEstimate.dev > availableCapacity.dev ? originalEstimate.dev -
+    // availableCapacity.dev : 0;
+    return originalEstimate.dev.compareTo(availableCapacity.dev) > 0
+        ? originalEstimate.dev.subtract(availableCapacity.dev) : BigDecimal.ZERO;
   }
 
-  private double secondHalfStoryCtEstimate(final Estimate originalEstimate,
+  private BigDecimal secondHalfStoryCtEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    double ctEstimate = 0;
+    BigDecimal ctEstimate = BigDecimal.ZERO;
 
-    if (originalEstimate.dev > availableCapacity.dev) {
+//    if (originalEstimate.dev > availableCapacity.dev) {
+//      ctEstimate = originalEstimate.ct;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev >= availableCapacity.ct) {
+//      ctEstimate = originalEstimate.ct;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ct
+//        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
+//      ctEstimate = originalEstimate.ct - (availableCapacity.ct - originalEstimate.dev);
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ct
+//        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
+//      ctEstimate = 0;
+//    }
+
+    if (originalEstimate.dev.compareTo(availableCapacity.dev) > 0) {
       ctEstimate = originalEstimate.ct;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev >= availableCapacity.ct) {
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) >= 0) {
       ctEstimate = originalEstimate.ct;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct
-        && originalEstimate.dev + originalEstimate.ct > availableCapacity.ct) {
-      ctEstimate = originalEstimate.ct - (availableCapacity.ct - originalEstimate.dev);
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ct
-        && originalEstimate.dev + originalEstimate.ct <= availableCapacity.ct) {
-      ctEstimate = 0;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) < 0
+        && originalEstimate.dev.add(originalEstimate.ct).compareTo(availableCapacity.ct) > 0) {
+      ctEstimate = originalEstimate.ct.subtract(availableCapacity.ct.subtract(originalEstimate.dev));
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ct) < 0
+        && originalEstimate.dev.add(originalEstimate.ct).compareTo(availableCapacity.ct) <= 0) {
+      ctEstimate = BigDecimal.ZERO;
     }
 
     return ctEstimate;
   }
 
-  private double secondHalfStoryFtEstimate(final Estimate originalEstimate,
+  private BigDecimal secondHalfStoryFtEstimate(final Estimate originalEstimate,
       final Estimate availableCapacity) {
 
-    double ftEstimate = 0;
+    BigDecimal ftEstimate = BigDecimal.ZERO;
 
-    if (originalEstimate.dev > availableCapacity.dev) {
+//    if (originalEstimate.dev > availableCapacity.dev) {
+//      ftEstimate = originalEstimate.ft;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev >= availableCapacity.ft) {
+//      ftEstimate = originalEstimate.ft;
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ft
+//        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
+//      ftEstimate = originalEstimate.ft - (availableCapacity.ft - originalEstimate.dev);
+//    } else if (originalEstimate.dev <= availableCapacity.dev
+//        && originalEstimate.dev < availableCapacity.ft
+//        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
+//      ftEstimate = 0;
+//    }
+
+    if (originalEstimate.dev.compareTo(availableCapacity.dev) > 0) {
       ftEstimate = originalEstimate.ft;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev >= availableCapacity.ft) {
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) >= 0) {
       ftEstimate = originalEstimate.ft;
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft
-        && originalEstimate.dev + originalEstimate.ft > availableCapacity.ft) {
-      ftEstimate = originalEstimate.ft - (availableCapacity.ft - originalEstimate.dev);
-    } else if (originalEstimate.dev <= availableCapacity.dev
-        && originalEstimate.dev < availableCapacity.ft
-        && originalEstimate.dev + originalEstimate.ft <= availableCapacity.ft) {
-      ftEstimate = 0;
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) < 0
+        && originalEstimate.dev.add(originalEstimate.ft).compareTo(availableCapacity.ft) > 0) {
+      ftEstimate = originalEstimate.ft.subtract(availableCapacity.ft.subtract(originalEstimate.dev));
+    } else if (originalEstimate.dev.compareTo(availableCapacity.dev) <= 0
+        && originalEstimate.dev.compareTo(availableCapacity.ft) < 0
+        && originalEstimate.dev.add(originalEstimate.ft).compareTo(availableCapacity.ft) <= 0) {
+      ftEstimate = BigDecimal.ZERO;
     }
 
     return ftEstimate;
