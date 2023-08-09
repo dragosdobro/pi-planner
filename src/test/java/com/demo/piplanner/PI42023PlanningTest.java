@@ -29,18 +29,13 @@ class PI42023PlanningTest {
                     newArrayList(
 
                         Story.builder().withId("US1138796").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(2).withCt(0).withFt(0).build()).withParent("F207076").build() ,
-                        //Story.builder().withId("DE309953").withDescription("Super relevant description 2").withPriority(2).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F207076").build() ,
                         Story.builder().withId("US1544120").withDescription("Super relevant description 3").withPriority(3).withEstimate(Estimate.Builder.newBuilder().withDev(6).withCt(3).withFt(1).build()).withParent("F207076").build() ,
                         Story.builder().withId("DE506581").withDescription("Super relevant description 4").withPriority(4).withEstimate(Estimate.Builder.newBuilder().withDev(1).withCt(0).withFt(1).build()).withParent("F207076").build() ,
-                        //Story.builder().withId("US1589563").withDescription("Super relevant description 5").withPriority(5).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F207076").build() ,
                         Story.builder().withId("US1640122").withDescription("Super relevant description 5").withPriority(5).withEstimate(Estimate.Builder.newBuilder().withDev(3).withCt(2).withFt(0).build()).withParent("F207076").build() ,
                         Story.builder().withId("US1645384").withDescription("Super relevant description 6").withPriority(6).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F207076").build() ,
                         Story.builder().withId("DE507451").withDescription("Super relevant description 7").withPriority(7).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(2).build()).withParent("F207076").build() ,
                         Story.builder().withId("DE541813").withDescription("Super relevant description 8").withPriority(8).withEstimate(Estimate.Builder.newBuilder().withDev(4).withCt(0).withFt(0).build()).withParent("F207076").build() ,
-                        //Story.builder().withId("DE541784").withDescription("Super relevant description 9").withPriority(9).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F207076").build() ,
-                        //Story.builder().withId("DE512928").withDescription("Super relevant description 10").withPriority(10).withEstimate(Estimate.Builder.newBuilder().withDev(3).withCt(3).withFt(0).build()).withParent("F207076").build() ,
                         Story.builder().withId("DE512928_SPIKE").withDescription("Super relevant description 11").withPriority(11).withEstimate(Estimate.Builder.newBuilder().withDev(0.5).withCt(0).withFt(0).build()).withParent("F207076").build()
-                        //Story.builder().withId("DE364865").withDescription("Super relevant description 12").withPriority(12).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F207076").build()
 
                     ))
                 .withId("F207076").withDescription("Super relevant description 5").withPriority(5).build() ,
@@ -68,14 +63,6 @@ class PI42023PlanningTest {
                     ))
                 .withId("F239317").withDescription("Super relevant description 19").withPriority(19).build() ,
 
-            /*Feature.builder().withChildren(
-                    newArrayList(
-
-                        Story.builder().withId("US1666100").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F218998").build()
-
-                    ))
-                .withId("F218998").withDescription("Super relevant description 39").withPriority(39).build() ,*/
-
             Feature.builder().withChildren(
                     newArrayList(
 
@@ -84,12 +71,10 @@ class PI42023PlanningTest {
                     ))
                 .withId("F235629").withDescription("Super relevant description 41").withPriority(41).build(),
 
-
             Feature.builder().withChildren(
                     newArrayList(
 
                         Story.builder().withId("US1648224").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(4).withCt(0).withFt(0).build()).withParent("F242122").build()
-                        //Story.builder().withId("US1648224").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F242122").build()
 
                     ))
                 .withId("F242122").withDescription("Super relevant description 49").withPriority(49).build() ,
@@ -98,7 +83,6 @@ class PI42023PlanningTest {
             Feature.builder().withChildren(
                     newArrayList(
 
-                        //Story.builder().withId("US1648232").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(4).withCt(0).withFt(0).build()).withParent("F242125").build()
                         Story.builder().withId("US1648232").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(2).withCt(0).withFt(0).build()).withParent("F242125").build()
 
                     ))
@@ -120,7 +104,6 @@ class PI42023PlanningTest {
                         Story.builder().withId("US1555130").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(3).withCt(2).withFt(0).build()).withParent("F237552").build() ,
                         Story.builder().withId("US1638530").withDescription("Super relevant description 2").withPriority(2).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(7.5).withFt(0).build()).withParent("F237552").build()
 
-
                     ))
                 .withId("F237552").withDescription("Super relevant description 52").withPriority(52).build() ,
 
@@ -133,7 +116,6 @@ class PI42023PlanningTest {
                         Story.builder().withId("US1654052").withDescription("Super relevant description 3").withPriority(3).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(3).build()).withParent("F232628").build() ,
                         Story.builder().withId("US1660660").withDescription("Super relevant description 4").withPriority(4).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(2).build()).withParent("F232628").build()
 
-
                     ))
                 .withId("F232628").withDescription("Super relevant description 53").withPriority(53).build() ,
 
@@ -142,27 +124,15 @@ class PI42023PlanningTest {
                     newArrayList(
 
                         Story.builder().withId("US1645694").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(1).withCt(0).withFt(2).build()).withParent("F185295").build() ,
-                        //Story.builder().withId("US1653555").withDescription("Super relevant description 2").withPriority(2).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("F185295").build() ,
                         Story.builder().withId("US1655181").withDescription("Super relevant description 3").withPriority(3).withEstimate(Estimate.Builder.newBuilder().withDev(2.5).withCt(0).withFt(1).build()).withParent("F185295").build()
 
                     ))
                 .withId("F185295").withDescription("Super relevant description 58").withPriority(58).build() ,
 
-            /*Feature.builder().withChildren(
-                    newArrayList(
-
-                        Story.builder().withId("US1661102").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("US1661102").build()
-
-                    ))
-                .withId("F219124").withDescription("Super relevant description 66").withPriority(66).build() ,  */
-
             Feature.builder().withChildren(
                     newArrayList(
 
-                        //Story.builder().withId("US1425684").withDescription("Super relevant description 1").withPriority(1).withEstimate(Estimate.Builder.newBuilder().withDev(0.5).withCt(0.5).withFt(0).build()).withParent("F207570").build(),
-                        //Story.builder().withId("US1618218").withDescription("Super relevant description 2").withPriority(2).withEstimate(Estimate.Builder.newBuilder().withDev(6).withCt(0).withFt(2).build()).withParent("F207570").build(),
                         Story.builder().withId("US1618218_SPIKE").withDescription("Super relevant description 3").withPriority(3).withEstimate(Estimate.Builder.newBuilder().withDev(1).withCt(0).withFt(0).build()).withParent("F207570").build()
-
 
                     ))
                 .withId("F207570").withDescription("Super relevant description 67").withPriority(67).build() ,
@@ -185,20 +155,6 @@ class PI42023PlanningTest {
 
                     ))
                 .withId("F243644").withDescription("Super relevant description 104").withPriority(104).build()
-
-
-            /*Feature.builder().withChildren(
-                    newArrayList(
-
-                        Story.builder().withId("").withDescription("Super relevant description 0").withPriority(0).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("").build() ,
-                        Story.builder().withId("").withDescription("Super relevant description 0").withPriority(0).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("").build() ,
-                        Story.builder().withId("").withDescription("Super relevant description 0").withPriority(0).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("").build() ,
-                        Story.builder().withId("").withDescription("Super relevant description 0").withPriority(0).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("").build() ,
-                        Story.builder().withId("").withDescription("Super relevant description 0").withPriority(0).withEstimate(Estimate.Builder.newBuilder().withDev(0).withCt(0).withFt(0).build()).withParent("").build()
-
-
-                    ))
-                .withId("").withDescription("Super relevant description 0").withPriority(0).build()*/
 
         ))
         .withName("Macallan Team Backlog").build();
